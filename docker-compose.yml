@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  emoticare-api:
+    build: .
+    container_name: emoticare-api
+    ports:
+      - "8090:8090"
+    environment:
+      # Load from .env file
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - HEYGEN_API_KEY=${HEYGEN_API_KEY}
+      - MODEL_NAME=${MODEL_NAME}
+      - APP_NAME=${APP_NAME}
+      - APP_VERSION=${APP_VERSION}
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - HEYGEN_BASE_URL=${HEYGEN_BASE_URL}
+      - DEFAULT_AVATAR_ID=${DEFAULT_AVATAR_ID}
+      - DEFAULT_VOICE_ID=${DEFAULT_VOICE_ID}
+      - ENVIRONMENT=${ENVIRONMENT}
+    env_file:
+      - .env
+    volumes:
+      # Mount for development (optional)
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - emoticare-network
+
+networks:
+  emoticare-network:
+    driver: bridge
