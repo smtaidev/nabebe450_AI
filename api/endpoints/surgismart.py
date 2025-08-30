@@ -9,7 +9,7 @@ from models.response import SurgiSmartResponse, SurgeryStep
 from services.gemma_service import gemma_service
 from core.dependencies import get_api_key
 
-router = APIRouter(prefix="/surgismart", tags=["SurgiSmart"])
+router = APIRouter(prefix="/surgismart")
 logger = logging.getLogger(__name__)
 
 @router.post("/simulate", response_model=SurgiSmartResponse)

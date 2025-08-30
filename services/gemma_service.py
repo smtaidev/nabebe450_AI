@@ -316,6 +316,7 @@ class GemmaService:
                 "estimated_duration": 180,
                 "risk_factors": ["patient-specific risk factors based on age, sex, weight, blood group, etc."],
                 "post_operative_care": ["post-operative care instructions tailored to patient profile"],
+                "preparation_instructions": ["pre-surgery preparation steps specific to patient and surgery type"],
                 "success_rate": 95.5
             }}
             
@@ -337,7 +338,8 @@ class GemmaService:
             3. Step-by-step surgical procedure explanation
             4. Risk assessment tailored to this specific patient
             5. Post-operative care specific to patient needs
-            6. Success rates and evidence-based information
+            6. Pre-surgery preparation instructions specific to patient profile and surgery type
+            7. Success rates and evidence-based information
             
             Be thorough, accurate, and consider the patient's specific characteristics (age {age}, sex {patient_data.get("sex")}, height {patient_data.get("height_in_cm")}cm, weight {patient_data.get("weight")}kg, blood group {patient_data.get("blood_group")}).
             """

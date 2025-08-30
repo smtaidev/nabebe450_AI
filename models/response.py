@@ -47,6 +47,7 @@ class SurgiSmartResponse(BaseModel):
     estimated_duration: int = Field(..., description="Total estimated surgery duration in minutes")
     risk_factors: List[str] = Field(..., description="Risk factors specific to this patient")
     post_operative_care: List[str] = Field(..., description="Post-operative care instructions")
+    preparation_instructions: List[str] = Field(..., description="Pre-surgery preparation instructions")
     success_rate: Optional[float] = Field(None, ge=0.0, le=100.0, description="Success rate percentage")
     confidence_score: Optional[float] = Field(None, ge=0.0, le=1.0, description="AI confidence in analysis")
     timestamp: datetime = Field(default_factory=datetime.now, description="Analysis timestamp")
