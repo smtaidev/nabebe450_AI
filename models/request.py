@@ -32,6 +32,12 @@ class SurgiSmartRequest(BaseModel):
     weight: int = Field(..., description="Patient's weight in kg")
     date_of_birth: str = Field(..., description="Patient's date of birth (YYYY-MM-DD)")
 
+class WoundMonitoringRequest(BaseModel):
+    patient_id: Optional[str] = Field(None, description="Patient identifier")
+    wound_location: Optional[str] = Field(None, description="Location of the wound (e.g., 'abdomen', 'knee', 'arm')")
+    days_post_surgery: Optional[int] = Field(None, description="Number of days since surgery")
+    additional_notes: Optional[str] = Field(None, description="Additional notes about the wound or symptoms")
+
 class HeyGenRequest(BaseModel):
     text: str = Field(..., description="Text to be spoken in the video")
     avatar_id: str = Field("Daisy-inskirt-20220818", description="HeyGen avatar ID")

@@ -393,5 +393,95 @@ class GemmaService:
             logger.error(f"Error generating surgery simulation: {str(e)}")
             raise Exception(f"Failed to generate surgery simulation: {str(e)}")
 
+    async def analyze_wound_healing(self, image_data: bytes, wound_info: dict) -> dict:
+        """Analyze wound healing progress from image"""
+        try:
+            # Convert image to PIL Image for Gemini vision
+            image = Image.open(io.BytesIO(image_data))
+            
+            # Create wound analysis prompt
+            wound_prompt = f"""
+            You are an expert medical AI specializing in wound healing and post-surgical care. Analyze this wound image and provide a comprehensive assessment.
+
+            **Patient Information:**
+            - Patient ID: {wound_info.get('patient_id', 'Not provided')}
+            - Wound Location: {wound_info.get('wound_location', 'Not specified')}
+            - Days Post-Surgery: {wound_info.get('days_post_surgery', 'Not specified')}
+            - Additional Notes: {wound_info.get('additional_notes', 'None')}
+
+            Please analyze the wound and provide assessment in JSON format:
+
+            {{
+                "healing_status": "excellent/good/concerning/poor - overall healing status",
+                "healing_progress": "Detailed description of healing progress, tissue appearance, closure status",
+                "infection_risk": "low/moderate/high - infection risk assessment",
+                "wound_characteristics": [
+                    "List of observed characteristics like color, texture, drainage, swelling, etc."
+                ],
+                "care_recommendations": [
+                    "Specific wound care recommendations",
+                    "Cleaning instructions",
+                    "Dressing changes",
+                    "Activity restrictions"
+                ],
+                "follow_up_needed": true/false,
+                "urgency_level": 1-5,
+                "warning_signs": [
+                    "Signs to watch for that would require immediate medical attention"
+                ],
+                "expected_timeline": "Expected healing timeline based on current progress"
+            }}
+
+            **Assessment Guidelines:**
+            1. Evaluate tissue color, texture, and appearance
+            2. Assess for signs of infection (redness, swelling, drainage)
+            3. Check wound closure and edge approximation
+            4. Consider healing timeline based on days post-surgery
+            5. Provide specific, actionable care recommendations
+            6. Flag any concerning features requiring medical attention
+
+            **Important:** This is for educational/monitoring purposes only. Always recommend professional medical evaluation for concerning findings.
+            """
+
+            # Use Gemini vision model for image analysis
+            response = self.model.generate_content([wound_prompt, image])
+            
+            # Parse the JSON response
+            try:
+                response_text = response.text.strip()
+                if response_text.startswith('```json'):
+                    response_text = response_text[7:-3]
+                elif response_text.startswith('```'):
+                    response_text = response_text[3:-3]
+                
+                analysis_result = json.loads(response_text)
+                
+                # Add confidence score
+                analysis_result['confidence_score'] = 0.85
+                
+                return analysis_result
+                
+            except json.JSONDecodeError:
+                # If JSON parsing fails, create a basic structure
+                logger.warning("Failed to parse wound analysis JSON, creating basic response")
+                return {
+                    "healing_status": "assessment_incomplete",
+                    "healing_progress": response.text[:500] + "..." if len(response.text) > 500 else response.text,
+                    "infection_risk": "moderate",
+                    "wound_characteristics": ["Analysis requires manual review"],
+                    "care_recommendations": [
+                        "Continue current wound care routine",
+                        "Monitor for changes",
+                        "Consult healthcare provider if concerned"
+                    ],
+                    "follow_up_needed": True,
+                    "urgency_level": 2,
+                    "confidence_score": 0.5
+                }
+                
+        except Exception as e:
+            logger.error(f"Error analyzing wound: {str(e)}")
+            raise Exception(f"Failed to analyze wound: {str(e)}")
+
 # Global service instance
 gemma_service = GemmaService()

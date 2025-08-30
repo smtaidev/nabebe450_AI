@@ -52,6 +52,21 @@ class SurgiSmartResponse(BaseModel):
     confidence_score: Optional[float] = Field(None, ge=0.0, le=1.0, description="AI confidence in analysis")
     timestamp: datetime = Field(default_factory=datetime.now, description="Analysis timestamp")
 
+class WoundMonitoringResponse(BaseModel):
+    analysis_id: str = Field(..., description="Unique analysis identifier")
+    patient_id: Optional[str] = Field(None, description="Patient identifier")
+    wound_location: str = Field(..., description="Location of the wound")
+    days_post_surgery: Optional[int] = Field(None, description="Days since surgery")
+    healing_status: str = Field(..., description="Overall wound healing status (excellent, good, concerning, poor)")
+    healing_progress: str = Field(..., description="Detailed healing progress assessment")
+    infection_risk: str = Field(..., description="Infection risk assessment (low, moderate, high)")
+    wound_characteristics: List[str] = Field(..., description="Observed wound characteristics")
+    care_recommendations: List[str] = Field(..., description="Wound care recommendations")
+    follow_up_needed: bool = Field(..., description="Whether medical follow-up is recommended")
+    urgency_level: int = Field(..., ge=1, le=5, description="Urgency level (1=routine, 5=immediate attention)")
+    confidence_score: Optional[float] = Field(None, ge=0.0, le=1.0, description="AI confidence in analysis")
+    timestamp: datetime = Field(default_factory=datetime.now, description="Analysis timestamp")
+
 class HeyGenResponse(BaseModel):
     video_id: str = Field(..., description="Unique video identifier")
     status: str = Field(..., description="Video generation status (processing, completed, failed)")

@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 
 from core.config import settings
 from core.dependencies import setup_logging, validate_api_key
-from api.endpoints import emoticare, prescription, surgismart, heygen
+from api.endpoints import emoticare, prescription, surgismart, heygen, wound_monitoring
 
 # Setup logging
 setup_logging()
@@ -50,11 +50,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include only 4 essential routers
+# Include 5 essential routers
 app.include_router(emoticare.router, prefix="/api/v1", tags=["emoticare"])
 app.include_router(prescription.router, prefix="/api/v1", tags=["prescription"]) 
 app.include_router(surgismart.router, prefix="/api/v1", tags=["surgismart"])
 app.include_router(heygen.router, prefix="/api/v1", tags=["heygen"])
+app.include_router(wound_monitoring.router, prefix="/api/v1", tags=["wound-monitoring"])
 
 @app.get("/")
 async def root():
@@ -67,6 +68,7 @@ async def root():
             "prescription": "/api/v1/prescription/analyze",
             "surgismart": "/api/v1/surgismart/simulate", 
             "heygen": "/api/v1/heygen/generate",
+            "wound-monitoring": "/api/v1/wound-monitoring/analyze",
             "docs": "/docs"
         }
     }

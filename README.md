@@ -8,6 +8,7 @@ A comprehensive FastAPI-based healthcare support system with AI-powered emotiona
 - **Prescription Analysis**: AI-powered prescription image analysis and medication extraction
 - **SurgiSmart**: Surgery simulation with 3-minute educational scripts
 - **HeyGen Integration**: AI video generation for healthcare content
+- **Wound Monitoring**: AI-powered wound healing analysis from uploaded photos
 
 ## API Endpoints
 
@@ -23,6 +24,9 @@ A comprehensive FastAPI-based healthcare support system with AI-powered emotiona
 ### HeyGen Video Generation
 - `POST /api/v1/heygen/generate` - Generate AI videos
 - `GET /api/v1/heygen/status/{video_id}` - Check video generation status
+
+### Wound Monitoring
+- `POST /api/v1/wound-monitoring/analyze` - Analyze wound healing from uploaded photos
 
 ## Quick Start with Docker
 
