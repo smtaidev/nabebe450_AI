@@ -72,5 +72,6 @@ class HeyGenResponse(BaseModel):
     status: str = Field(..., description="Video generation status (processing, completed, failed)")
     message: str = Field(..., description="Status message")
     video_url: Optional[str] = Field(None, description="Download URL when video is ready")
+    s3_url: Optional[str] = Field(None, description="S3 URL where video is stored")
     estimated_time: Optional[int] = Field(None, description="Estimated time remaining in seconds")
     timestamp: datetime = Field(default_factory=datetime.now, description="Response timestamp")

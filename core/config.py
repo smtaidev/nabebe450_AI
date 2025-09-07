@@ -6,25 +6,48 @@ load_dotenv()
 class Settings:
     def __init__(self):
         # Model Configuration
-        self.model_name: str = os.getenv("MODEL_NAME", "gemma-3-27b-it")
+        model_name_env = os.getenv("MODEL_NAME", "")
+        self.model_name: str = model_name_env.strip() if model_name_env.strip() else "gemma-3-27b-it"
         
         # API Keys
-        self.google_api_key: str = os.getenv("GOOGLE_API_KEY", "")
-        self.heygen_api_key: str = os.getenv("HEYGEN_API_KEY", "")
+        google_api_key_env = os.getenv("GOOGLE_API_KEY", "")
+        self.google_api_key: str = google_api_key_env.strip() if google_api_key_env else ""
+        heygen_api_key_env = os.getenv("HEYGEN_API_KEY", "")
+        self.heygen_api_key: str = heygen_api_key_env.strip() if heygen_api_key_env else ""
         
         # Application Configuration
-        self.app_name: str = os.getenv("APP_NAME", "EmotiCare Support API")
-        self.app_version: str = os.getenv("APP_VERSION", "1.0.0")
-        self.host: str = os.getenv("HOST", "0.0.0.0")
-        self.port: int = int(os.getenv("PORT", "8090"))
+        app_name_env = os.getenv("APP_NAME", "")
+        self.app_name: str = app_name_env if app_name_env.strip() else "EmotiCare Support API"
+        app_version_env = os.getenv("APP_VERSION", "")
+        self.app_version: str = app_version_env.strip() if app_version_env.strip() else "1.0.0"
+        host_env = os.getenv("HOST", "")
+        self.host: str = host_env.strip() if host_env.strip() else "0.0.0.0"
+        port_str = os.getenv("PORT", "8090")
+        self.port: int = int(port_str) if port_str and port_str.strip().isdigit() else 8090
         
         # HeyGen Configuration
-        self.heygen_base_url: str = os.getenv("HEYGEN_BASE_URL", "https://api.heygen.com/v2")
-        self.default_avatar_id: str = os.getenv("DEFAULT_AVATAR_ID", "Daisy-inskirt-20220818")
-        self.default_voice_id: str = os.getenv("DEFAULT_VOICE_ID", "2d5b0e6cf36f460aa7fc47e3eee4ba54")
+        heygen_base_url_env = os.getenv("HEYGEN_BASE_URL", "")
+        self.heygen_base_url: str = heygen_base_url_env.strip() if heygen_base_url_env.strip() else "https://api.heygen.com/v2"
+        default_avatar_id_env = os.getenv("DEFAULT_AVATAR_ID", "")
+        self.default_avatar_id: str = default_avatar_id_env.strip() if default_avatar_id_env.strip() else "Daisy-inskirt-20220818"
+        default_voice_id_env = os.getenv("DEFAULT_VOICE_ID", "")
+        self.default_voice_id: str = default_voice_id_env.strip() if default_voice_id_env.strip() else "2d5b0e6cf36f460aa7fc47e3eee4ba54"
         
         # Environment
-        self.environment: str = os.getenv("ENVIRONMENT", "development")
+        environment_env = os.getenv("ENVIRONMENT", "")
+        self.environment: str = environment_env.strip() if environment_env.strip() else "development"
+        
+        # S3 Configuration (DigitalOcean Spaces)
+        s3_access_key_env = os.getenv("S3_ACCESS_KEY", "")
+        self.s3_access_key: str = s3_access_key_env.strip() if s3_access_key_env else ""
+        s3_secret_key_env = os.getenv("S3_SECRET_KEY", "")
+        self.s3_secret_key: str = s3_secret_key_env.strip() if s3_secret_key_env else ""
+        s3_region_env = os.getenv("S3_REGION", "")
+        self.s3_region: str = s3_region_env.strip() if s3_region_env.strip() else "nyc3"
+        s3_bucket_name_env = os.getenv("S3_BUCKET_NAME", "")
+        self.s3_bucket_name: str = s3_bucket_name_env.strip() if s3_bucket_name_env.strip() else "smtech-space"
+        s3_endpoint_env = os.getenv("S3_ENDPOINT", "")
+        self.s3_endpoint: str = s3_endpoint_env.strip() if s3_endpoint_env.strip() else "https://nyc3.digitaloceanspaces.com/"
         
     def validate(self):
         if not self.google_api_key:
